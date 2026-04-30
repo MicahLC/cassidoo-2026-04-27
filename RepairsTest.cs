@@ -191,5 +191,40 @@ namespace cassidoo_2026_04_27
 			Repairs.MinRepairs(grid, 2).Should().Be(3);
 			Repairs.MinRepairs(grid, 1).Should().Be(4);
 		}
+
+		[TestMethod]
+		public void TestTileAdjacent()
+		{
+			Repairs.Tile c1 = new Repairs.Tile(1, 1);
+			c1.IsAdjacent(new Repairs.Tile(1, 2)).Should().Be(true);
+			c1.IsAdjacent(new Repairs.Tile(1, 0)).Should().Be(true);
+			c1.IsAdjacent(new Repairs.Tile(1, 3)).Should().Be(false);
+			c1.IsAdjacent(new Repairs.Tile(2, 1)).Should().Be(true);
+			c1.IsAdjacent(new Repairs.Tile(0, 1)).Should().Be(true);
+			c1.IsAdjacent(new Repairs.Tile(2, 2)).Should().Be(false);
+			c1.IsAdjacent(new Repairs.Tile(0, 0)).Should().Be(false);
+		}
+
+		[TestMethod]
+		public void TestRegionAdjacent()
+		{
+			Repairs.Region r1 = new Repairs.Region(new Repairs.Tile(1, 1));
+			r1.AddTile(new Repairs.Tile(1, 2));
+			r1.IsAdjacent(new Repairs.Tile(1, 3)).Should().Be(true);
+			r1.IsAdjacent(new Repairs.Tile(1, 0)).Should().Be(true);
+			r1.IsAdjacent(new Repairs.Tile(2, 2)).Should().Be(true);
+			r1.IsAdjacent(new Repairs.Tile(1, 4)).Should().Be(false);
+			r1.IsAdjacent(new Repairs.Tile(3, 2)).Should().Be(false);
+
+			Repairs.Region r2 = new Repairs.Region(new Repairs.Tile(1, 4));
+			r2.AddTile(new Repairs.Tile(1, 3));
+
+			r1.IsAdjacent(r2).Should().Be(true);
+
+			Repairs.Region r3 = new Repairs.Region(new Repairs.Tile(1, 4));
+			r3.AddTile(new Repairs.Tile(1, 5));
+
+			r1.IsAdjacent(r3).Should().Be(false);
+		}
 	}
 }
