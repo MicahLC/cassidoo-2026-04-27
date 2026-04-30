@@ -22,15 +22,32 @@
 						{
 							brokenRegions.Add(new Region(t));
 						}
-						else
+						else if(adjacentRegions.Count == 1)
 						{
-
+							adjacentRegions[0].AddTile(t);
+						} else
+						{
+							adjacentRegions[0].AddTile(t);
+							for (int i = 1; i < adjacentRegions.Count; i++)
+							{
+								adjacentRegions[0].AddRegion(adjacentRegions[i]);
+								brokenRegions.Remove(adjacentRegions[i]);
+							}
 						}
 					}
 				}
 			}
 
-			return -1;
+			int runningSum = 0;
+			foreach (var region in brokenRegions)
+			{
+				if (region.GetSize() > k)
+				{
+					// let's break it down and add it.
+				}
+			}
+
+			return runningSum;
 		}
 
 		public class Tile(int row, int col)
@@ -73,6 +90,11 @@
 			public bool IsAdjacent(Region r)
 			{
 				return r.Tiles.Any(t => IsAdjacent(t));
+			}
+
+			public int GetSize()
+			{
+				return Tiles.Count;
 			}
 		}
 	}
