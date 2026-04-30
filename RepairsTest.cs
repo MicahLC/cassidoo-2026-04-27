@@ -227,5 +227,24 @@ namespace cassidoo_2026_04_27
 
 			r1.IsAdjacent(r3).Should().Be(false);
 		}
+
+		[TestMethod]
+		public void TestGenerateRemovalIndices()
+		{
+			Repairs.GenerateRemovalIndices(3, 1).Should().BeEquivalentTo(new List<int[]> { new int[] { 0 }, new int[] { 1 }, new int[] { 2 } });
+			Repairs.GenerateRemovalIndices(3, 2).Should().BeEquivalentTo(new List<int[]> { new int[] { 0, 1 }, new int[] { 0, 2 }, new int[] { 1, 2 } });
+			Repairs.GenerateRemovalIndices(5, 3).Should().BeEquivalentTo(new List<int[]> { 
+				new int[] { 0, 1, 2 },
+				new int[] { 0, 1, 3 },
+				new int[] { 0, 1, 4 },
+				new int[] { 0, 2, 3 },
+				new int[] { 0, 2, 4 },
+				new int[] { 0, 3, 4 },
+				new int[] { 1, 2, 3 },
+				new int[] { 1, 2, 4 },
+				new int[] { 1, 3, 4 },
+				new int[] { 2, 3, 4 },
+			});
+		}
 	}
 }

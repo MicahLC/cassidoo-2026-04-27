@@ -22,10 +22,11 @@
 						{
 							brokenRegions.Add(new Region(t));
 						}
-						else if(adjacentRegions.Count == 1)
+						else if (adjacentRegions.Count == 1)
 						{
 							adjacentRegions[0].AddTile(t);
-						} else
+						}
+						else
 						{
 							adjacentRegions[0].AddTile(t);
 							for (int i = 1; i < adjacentRegions.Count; i++)
@@ -41,14 +42,71 @@
 			int runningSum = 0;
 			foreach (var region in brokenRegions)
 			{
-				if (region.GetSize() > k)
+				int regionSize = region.Size;
+				if (regionSize > k)
 				{
 					// let's break it down and add it.
 					// need some way to try and remove increasing numbers of tiles and recalculate the subregions of the broken region and see if that gets us to what we want.
+					if (k == 0)
+					{
+						runningSum += regionSize;
+					}
+					else if (k == 1)
+					{
+						runningSum += regionSize / 2;
+					}
+					else
+					{
+						int maxRepairs = Math.Min(regionSize - k, regionSize / k + 1);
+						// generate indices to remove.
+						for (int removeCount = 1; removeCount <= maxRepairs; removeCount++)
+						{
+							List<int[]> allPossibleRemovalIndices = GenerateRemovalIndices(regionSize, removeCount);
+							foreach (var indicesToRemove in allPossibleRemovalIndices)
+							{
+								// TODO: reread this code, it might need more writing done.
+								List<Region> splitRegions = region.RepairAndRecalculate(indicesToRemove);
+								if (splitRegions.All(r => r.Size <= k))
+								{
+									runningSum += removeCount;
+									break;
+								}
+							}
+						}
+					}
 				}
 			}
 
 			return runningSum;
+		}
+
+		public static List<int[]> GenerateRemovalIndices(int regionSize, int removeCount)
+		{
+			List<int[]> result = new List<int[]>();
+			int[] original = new int[removeCount];
+			IterateRemaining(result, original, 0, 0, regionSize);
+			return result;
+		}
+
+		private static void IterateRemaining(List<int[]> list, int[] array, int index, int rangeStart, int rangeEnd)
+		{
+			if (index == array.Length - 1)
+			{
+				// we're on the last index, just need to iterate and add
+				for (int i = rangeStart; i < rangeEnd; i++)
+				{
+					array[index] = i;
+					int[] copy = new int[array.Length];
+					array.CopyTo(copy, 0);
+					list.Add(copy);
+				}
+				return;
+			}
+			for (int i = rangeStart; i < rangeEnd; ++i)
+			{
+				array[index] = i;
+				IterateRemaining(list, array, index + 1, i + 1, rangeEnd);
+			}
 		}
 
 		public class Tile(int row, int col)
@@ -67,6 +125,8 @@
 		public class Region
 		{
 			readonly List<Tile> Tiles = [];
+
+			public int Size { get { return Tiles.Count; } }
 
 			public Region(Tile c)
 			{
@@ -93,9 +153,43 @@
 				return r.Tiles.Any(t => IsAdjacent(t));
 			}
 
-			public int GetSize()
+			internal List<Region> RepairAndRecalculate(int[] indicesToRemove)
 			{
-				return Tiles.Count;
+				List<Region> results = new List<Region>();
+				List<Tile> tiles = [.. Tiles];
+				for (int i = 0; i < indicesToRemove.Length; i++)
+				{
+					tiles.Remove(Tiles[i]);
+				}
+				foreach (Tile t in tiles)
+				{
+					if (results.Count == 0)
+					{
+						results.Add(new Region(t));
+					}
+					else
+					{
+						List<Region> adjacentRegions = results.FindAll(r => r.IsAdjacent(t));
+						if (adjacentRegions.Count == 0)
+						{
+							results.Add(new Region(t));
+						}
+						else if (adjacentRegions.Count == 1)
+						{
+							adjacentRegions[0].AddTile(t);
+						}
+						else
+						{
+							adjacentRegions[0].AddTile(t);
+							for (int i = 1; i < adjacentRegions.Count; i++)
+							{
+								adjacentRegions[0].AddRegion(adjacentRegions[i]);
+								results.Remove(adjacentRegions[i]);
+							}
+						}
+					}
+				}
+				return results;
 			}
 		}
 	}
