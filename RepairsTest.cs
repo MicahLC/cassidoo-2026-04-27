@@ -32,5 +32,95 @@ namespace cassidoo_2026_04_27
 
 			Repairs.MinRepairs(newGrid, newK).Should().Be(3);
 		}
+
+		[TestMethod]
+		public void TestNoGaps()
+		{
+			int[,] grid = {
+				{1, 1, 1 },
+				{1, 1, 1 },
+				{1, 1, 1 }
+			};
+			var k = 1;
+			Repairs.MinRepairs(grid, k).Should().Be(0);
+		}
+
+		[TestMethod]
+		public void TestFillIt()
+		{
+			int[,] grid =
+			{
+				{ 0, 0, 0, 0 }
+			};
+			var k = 0;
+			Repairs.MinRepairs(grid, k).Should().Be(4);
+		}
+
+		[TestMethod]
+		public void TestStraightLine()
+		{
+			int[,] grid = {
+				{1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 }
+			};
+			Repairs.MinRepairs(grid, 7).Should().Be(0);
+			Repairs.MinRepairs(grid, 6).Should().Be(1);
+			Repairs.MinRepairs(grid, 5).Should().Be(1);
+			Repairs.MinRepairs(grid, 4).Should().Be(1);
+			Repairs.MinRepairs(grid, 3).Should().Be(1);
+			Repairs.MinRepairs(grid, 2).Should().Be(2);
+			Repairs.MinRepairs(grid, 1).Should().Be(3);
+		}
+
+		[TestMethod]
+		public void TestBigBrokenSection()
+		{
+			int[,] grid = {
+				{1, 0, 0, 0 },
+				{0, 0, 0, 0 }
+			};
+			Repairs.MinRepairs(grid, 7).Should().Be(0);
+			Repairs.MinRepairs(grid, 6).Should().Be(1);
+			Repairs.MinRepairs(grid, 5).Should().Be(2);
+			Repairs.MinRepairs(grid, 4).Should().Be(2);
+			Repairs.MinRepairs(grid, 3).Should().Be(2);
+			Repairs.MinRepairs(grid, 2).Should().Be(3);
+			Repairs.MinRepairs(grid, 1).Should().Be(3);
+		}
+
+		[TestMethod]
+		public void TestBiggerBrokenSection()
+		{
+			int[,] grid =
+			{
+				{0, 0 , 1, 0},
+				{0, 0, 0, 0 },
+				{0, 0, 0, 0 }
+			};
+			Repairs.MinRepairs(grid, 10).Should().Be(1);
+			Repairs.MinRepairs(grid, 9).Should().Be(2);
+			Repairs.MinRepairs(grid, 8).Should().Be(2);
+			Repairs.MinRepairs(grid, 7).Should().Be(2);
+			Repairs.MinRepairs(grid, 6).Should().Be(2);
+			Repairs.MinRepairs(grid, 5).Should().Be(2);
+			Repairs.MinRepairs(grid, 4).Should().Be(3);
+			Repairs.MinRepairs(grid, 3).Should().Be(4);
+			Repairs.MinRepairs(grid, 2).Should().Be(4);
+			Repairs.MinRepairs(grid, 1).Should().Be(5);
+		}
+
+		[TestMethod]
+		public void TestDiagonalsDontConnect()
+		{
+			int[,] grid =
+			{
+				{1, 1, 1, 0, 0 },
+				{1, 1, 0, 1, 0 },
+				{0, 1, 0, 0, 1 },
+				{0, 0, 1, 1, 1 },
+			};
+			Repairs.MinRepairs(grid, 3).Should().Be(0);
+			Repairs.MinRepairs(grid, 2).Should().Be(3);
+			Repairs.MinRepairs(grid, 1).Should().Be(3);
+		}
 	}
 }
