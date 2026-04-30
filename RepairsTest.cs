@@ -119,6 +119,7 @@ namespace cassidoo_2026_04_27
 				{0, 1, 0, 0, 1 },
 				{0, 0, 1, 1, 1 },
 			};
+			// 3 distinct groups of 3 broken tiles, each in a 2x2 space
 			Repairs.MinRepairs(grid, 3).Should().Be(0);
 			Repairs.MinRepairs(grid, 2).Should().Be(3);
 			Repairs.MinRepairs(grid, 1).Should().Be(3);
