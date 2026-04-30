@@ -44,6 +44,7 @@
 				if (region.GetSize() > k)
 				{
 					// let's break it down and add it.
+					// need some way to try and remove increasing numbers of tiles and recalculate the subregions of the broken region and see if that gets us to what we want.
 				}
 			}
 
