@@ -140,5 +140,56 @@ namespace cassidoo_2026_04_27
 			Repairs.MinRepairs(grid, 2).Should().Be(2);
 			Repairs.MinRepairs(grid, 1).Should().Be(4);
 		}
+
+		[TestMethod]
+		public void TestZigZagHGap()
+		{
+			int[,] grid =
+			{
+				{1, 0, 0, 0, 0 },
+				{1, 1, 0, 0, 1 },
+				{0, 0, 0, 1, 1 }
+			};
+			// 9 broken tiles in a 3 x 5 space
+			Repairs.MinRepairs(grid, 5).Should().Be(1);
+			Repairs.MinRepairs(grid, 4).Should().Be(2);
+			Repairs.MinRepairs(grid, 3).Should().Be(2);
+			Repairs.MinRepairs(grid, 2).Should().Be(3);
+			Repairs.MinRepairs(grid, 1).Should().Be(4);
+		}
+
+		[TestMethod]
+		public void TestThickerHGap()
+		{
+			int[,] grid =
+			{
+				{1, 0, 0, 0, 0 },
+				{1, 1, 0, 0, 1 },
+				{1, 0, 0, 0, 1 }
+			};
+			// 9 broken tiles in a 3 x 4 space
+			Repairs.MinRepairs(grid, 5).Should().Be(2);
+			Repairs.MinRepairs(grid, 4).Should().Be(2);
+			Repairs.MinRepairs(grid, 3).Should().Be(3);
+			Repairs.MinRepairs(grid, 2).Should().Be(3);
+			Repairs.MinRepairs(grid, 1).Should().Be(4);
+		}
+
+		[TestMethod]
+		public void TestThickZigZag()
+		{
+			int[,] grid =
+			{
+				{1, 0, 0, 0, 1 },
+				{1, 0, 0, 0, 1 },
+				{1, 1, 0, 0, 0 }
+			};
+			// 9 broken tiles in a 3 x 4 space
+			Repairs.MinRepairs(grid, 5).Should().Be(2);
+			Repairs.MinRepairs(grid, 4).Should().Be(2);
+			Repairs.MinRepairs(grid, 3).Should().Be(3);
+			Repairs.MinRepairs(grid, 2).Should().Be(3);
+			Repairs.MinRepairs(grid, 1).Should().Be(4);
+		}
 	}
 }
