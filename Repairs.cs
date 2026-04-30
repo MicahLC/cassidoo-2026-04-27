@@ -46,31 +46,38 @@
 				if (regionSize > k)
 				{
 					// let's break it down and add it.
-					// need some way to try and remove increasing numbers of tiles and recalculate the subregions of the broken region and see if that gets us to what we want.
 					if (k == 0)
 					{
+						// Trivial case: we fill in all the broken tiles
 						runningSum += regionSize;
 					}
 					else if (k == 1)
 					{
+						// Trivial case: we fill in every other tile in the region
 						runningSum += regionSize / 2;
 					}
 					else
 					{
-						int maxRepairs = Math.Min(regionSize - k, regionSize / k + 1);
-						// generate indices to remove.
+						// get an estimate on the maximum number of repairs we'll need
+						int maxRepairs = regionSize / 2;
+						bool found = false;
 						for (int removeCount = 1; removeCount <= maxRepairs; removeCount++)
 						{
 							List<int[]> allPossibleRemovalIndices = GenerateRemovalIndices(regionSize, removeCount);
 							foreach (var indicesToRemove in allPossibleRemovalIndices)
 							{
-								// TODO: reread this code, it might need more writing done.
+								// see what the new regions look like if we remove this set of indices.
 								List<Region> splitRegions = region.RepairAndRecalculate(indicesToRemove);
 								if (splitRegions.All(r => r.Size <= k))
 								{
 									runningSum += removeCount;
+									found = true;
 									break;
 								}
+							}
+							if (found)
+							{
+								break;
 							}
 						}
 					}
@@ -159,7 +166,7 @@
 				List<Tile> tiles = [.. Tiles];
 				for (int i = 0; i < indicesToRemove.Length; i++)
 				{
-					tiles.Remove(Tiles[i]);
+					tiles.Remove(Tiles[indicesToRemove[i]]);
 				}
 				foreach (Tile t in tiles)
 				{

@@ -80,7 +80,7 @@ namespace cassidoo_2026_04_27
 			};
 			Repairs.MinRepairs(grid, 7).Should().Be(0);
 			Repairs.MinRepairs(grid, 6).Should().Be(1);
-			Repairs.MinRepairs(grid, 5).Should().Be(2);
+			Repairs.MinRepairs(grid, 5).Should().Be(1);
 			Repairs.MinRepairs(grid, 4).Should().Be(2);
 			Repairs.MinRepairs(grid, 3).Should().Be(2);
 			Repairs.MinRepairs(grid, 2).Should().Be(3);
@@ -98,7 +98,7 @@ namespace cassidoo_2026_04_27
 			};
 			// 11 broken tiles in a 3 x 4 space.
 			Repairs.MinRepairs(grid, 10).Should().Be(1);
-			Repairs.MinRepairs(grid, 9).Should().Be(2);
+			Repairs.MinRepairs(grid, 9).Should().Be(1);
 			Repairs.MinRepairs(grid, 8).Should().Be(2);
 			Repairs.MinRepairs(grid, 7).Should().Be(2);
 			Repairs.MinRepairs(grid, 6).Should().Be(2);
@@ -107,6 +107,32 @@ namespace cassidoo_2026_04_27
 			Repairs.MinRepairs(grid, 3).Should().Be(4);
 			Repairs.MinRepairs(grid, 2).Should().Be(4);
 			Repairs.MinRepairs(grid, 1).Should().Be(5);
+		}
+
+		[TestMethod]
+		public void TestMassiveBrokenSection()
+		{
+			int[,] grid =
+			{
+				{0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0, 0}
+			};
+			// 36 broken tiles in a 6 x 6 space
+			Repairs.MinRepairs(grid, 34).Should().Be(2);
+			Repairs.MinRepairs(grid, 33).Should().Be(2);
+			Repairs.MinRepairs(grid, 32).Should().Be(3);
+			Repairs.MinRepairs(grid, 31).Should().Be(3);
+			Repairs.MinRepairs(grid, 30).Should().Be(3);
+			Repairs.MinRepairs(grid, 29).Should().Be(4);
+			Repairs.MinRepairs(grid, 26).Should().Be(4);
+			Repairs.MinRepairs(grid, 25).Should().Be(5);
+			Repairs.MinRepairs(grid, 21).Should().Be(5);
+			Repairs.MinRepairs(grid, 20).Should().Be(6);
+			Repairs.MinRepairs(grid, 15).Should().Be(6);
 		}
 
 		[TestMethod]
